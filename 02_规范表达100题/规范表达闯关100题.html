@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>规范表达闯关 100 题</title><style>
+:root{--paper:#faf8f3;--ink:#1f1c18;--muted:#6b6459;--line:#e2dccf;--accent:#a4161a;--accent2:#1f4d3f;--card:#fff;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Songti SC","STSong","SimSun",serif;font-weight:600;letter-spacing:.5px}
+a{color:var(--accent2)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+header.top{padding:48px 0 24px;border-bottom:1px solid var(--line);margin-bottom:22px}
+header.top h1{margin:0 0 10px;font-size:32px}
+header.top p{margin:0;color:var(--muted);font-size:14px}
+.stats{display:flex;gap:26px;margin-top:18px;flex-wrap:wrap}
+.stat b{display:block;font-size:24px;color:var(--accent);font-family:"Songti SC",serif}
+.stat span{font-size:12px;color:var(--muted)}
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.94);backdrop-filter:blur(6px);padding:14px 0;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=search],select{font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input:focus{outline:2px solid rgba(164,22,26,.18);border-color:var(--accent)}
+.btn{font:inherit;cursor:pointer;padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{font-size:13px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;cursor:pointer;color:var(--muted)}
+.chip.on{background:var(--ink);color:#faf8f3;border-color:var(--ink)}
+progress{width:100%;height:4px;border:0;background:#eae4d7}
+progress::-webkit-progress-bar{background:#eae4d7}
+progress::-webkit-progress-value{background:var(--accent)}
+progress::-moz-progress-bar{background:var(--accent)}
+.cat-head{margin:38px 0 12px}
+.cat-head h2{font-size:22px;margin:0 0 6px}
+.cat-head p{margin:0;color:var(--muted);font-size:13.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card .meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.idx{font-family:"Songti SC",serif;color:var(--accent);font-weight:600}
+.sent{margin:8px 0 10px;font-size:16px;font-family:"Songti SC","STSong",serif;line-height:1.9}
+.ansRow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.label{font-size:11px;letter-spacing:2px;color:var(--muted);border-left:3px solid var(--accent);padding-left:8px}
+.ans{font-weight:700;font-size:17px;color:var(--accent2)}
+.masked .ans{filter:blur(6px);cursor:pointer;user-select:none}
+.masked .ans:hover{filter:blur(3px)}
+.tip{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
+.master{margin-top:10px}
+.done{opacity:.62}
+.foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
+.overlay{position:fixed;inset:0;background:rgba(31,28,24,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:640px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal h3{margin:0 0 6px;font-size:18px;color:var(--accent)}
+@media(max-width:640px){header.top h1{font-size:24px}.sent{font-size:15px}.wrap{padding:0 14px 60px}}
+
+.qcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 32px;box-shadow:0 8px 30px rgba(0,0,0,.05);margin-top:22px}
+.qtop{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);letter-spacing:1px}
+.qsent{font-family:"Songti SC","STSong",serif;font-size:23px;line-height:2;margin:22px 0 6px}
+.qhint{font-size:13px;color:var(--muted)}
+.answerRow{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.answerRow input{flex:1;min-width:200px;font-size:17px;padding:12px 14px}
+.fb{margin-top:20px;padding:16px 18px;border-radius:12px;display:none}
+.fb.ok{display:block;background:#eef6f1;border:1px solid #c8e0d2}
+.fb.no{display:block;background:#fdf0ef;border:1px solid #f0cfcc}
+.fb.tip{display:block;background:#fff9e8;border:1px solid #f0e2b6}
+.fb b{font-size:18px;color:var(--accent2)}
+.fb .term{font-size:22px;font-weight:700;color:var(--accent)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opt{font:inherit;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.right{background:#eef6f1;border-color:#8bbfa5}
+.opt.wrong{background:#fdf0ef;border-color:#d9a09b}
+.opt .k{color:var(--muted);font-size:12px;margin-right:8px}
+.mini{font-size:12.5px;color:var(--muted);margin-top:8px}
+.result h2{font-size:26px;margin:0 0 6px}
+.big{font-size:44px;color:var(--accent);font-family:"Songti SC",serif;line-height:1.2}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+.box b{display:block;font-size:26px;color:var(--accent2)}
+.box span{font-size:12.5px;color:var(--muted)}
+.wrongItem{border-bottom:1px dashed var(--line);padding:12px 0}
+.wrongItem:last-child{border:0}
+.wrongItem p{margin:0 0 4px}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:640px){.qsent{font-size:19px}.opts{grid-template-columns:1fr}.qcard{padding:22px 18px}.grid3{grid-template-columns:1fr 1fr 1fr}}
+</style></head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>规范表达闯关 · 100 题</h1>
+  <p>看材料句，写出规范表达。先输入判定，答错自动弹出四个选项；解析在最后，先别急着看。</p>
+</header>
+
+<section id="home">
+  <div class="qcard">
+    <h3 style="margin-top:0">选择练习范围</h3>
+    <div class="chips" id="catChips"></div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn primary" id="start">开始闯关</button>
+      <button class="btn" id="reviewWrong">只练错题本（<span id="wrongCount">0</span>）</button>
+    </div>
+    <p class="mini" id="history"></p>
+    <p class="mini">判分规则：与标准表达或同义写法完全一致才算对；差一个字、换一种说法都会弹出四个选项，正好借机辨析。输入框留空点“提交”不会跳过。</p>
+  </div>
+</section>
+
+<section id="quiz" style="display:none">
+  <div class="row" style="justify-content:space-between;margin-top:6px">
+    <span class="small" id="qpos"></span>
+    <span class="small" id="qscore"></span>
+  </div>
+  <progress id="bar" value="0" max="100" style="margin-top:8px"></progress>
+  <div class="qcard">
+    <div class="qtop"><span id="qcat"></span><span id="qidx"></span></div>
+    <p class="qsent" id="qsent"></p>
+    <p class="qhint" id="qhint">写出这一句对应的规范表达（2—8 个字）</p>
+    <div class="answerRow">
+      <input type="text" id="ans" placeholder="在这里输入规范表达，回车提交" autocomplete="off">
+      <button class="btn primary" id="submit">提交</button>
+      <button class="btn" id="hint">给点提示</button>
+      <button class="btn" id="skip">跳过</button>
+    </div>
+    <div class="fb" id="fb"></div>
+    <div class="row" style="margin-top:16px;display:none" id="nextRow">
+      <button class="btn primary" id="next">下一题 →</button>
+      <span class="small" id="savedTip"></span>
+    </div>
+  </div>
+</section>
+
+<section id="result" style="display:none">
+  <div class="qcard result">
+    <h2>本轮结束</h2>
+    <p class="small">一次答对率 <span class="big" id="rate">0%</span></p>
+    <div class="grid3">
+      <div class="box"><b id="rFirst">0</b><span>一次答对</span></div>
+      <div class="box"><b id="rHint">0</b><span>提示后答对</span></div>
+      <div class="box"><b id="rWrong">0</b><span>未掌握</span></div>
+    </div>
+    <h3>错题回顾</h3>
+    <div id="wrongList"></div>
+    <div class="row" style="margin-top:20px">
+      <button class="btn primary" id="againWrong">立即重练错题</button>
+      <button class="btn" id="againAll">再刷一轮</button>
+      <button class="btn" id="home2">返回首页</button>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+const DATA = {"cats":[{"id":"gov","name":"政务服务与政府治理","intro":"概括政府“怎么做事”的词，常见于概括做法题、对策题。答题时优先用“动词+宾语”的四字结构。","usage":"高频句式：完善……机制、压实……责任、推动……下沉、实现……一体化、从“管理”转向“服务”。"},{"id":"city","name":"城市治理与公共服务","intro":"城市治理类材料专供，考查精细化、智慧化、人性化三条主线，以及“重地上轻地下”等典型问题。","usage":"问题侧：设施不完善、重面子轻里子；对策侧：分区分级、智慧监管、补齐短板、因地制宜。"},{"id":"ind","name":"产业转型与企业经营","intro":"常考“变与不变”“传统与现代”“规模与品质”的辩证关系，是2026副省级作文的原生语境。","usage":"分析句式：以……为主、……为辅；在……之间找准平衡点；既……又……，防止非此即彼。"},{"id":"rur","name":"乡村振兴与基层发展","intro":"空心化、撂荒、等靠要、头雁效应是四大高频词，作答多用“人、地、钱、业”四维展开。","usage":"对策句式：盘活……资源、推动……下沉、培育……带头人、拓宽……渠道。"},{"id":"liv","name":"民生保障（养老·医疗·教育）","intro":"“一老一小”是近年重点，养老看普惠可及与安全监管的平衡，教育看均衡与资源共享。","usage":"对策句式：发展普惠型……、推进医养结合、促进优质资源下沉、避免“一刀切”。"},{"id":"cul","name":"文化传承与文化产业","intro":"核心是“传承—转化—传播”三步：先护住根脉，再创造性转化，最后提升影响力。","usage":"对策句式：坚持修旧如旧、推动创造性转化创新性发展、打造文化新地标、讲好中国故事。"},{"id":"eco","name":"生态文明与绿色发展","intro":"“两山”理念贯穿，问题侧抓“重经济轻环境”，对策侧抓绿色低碳、循环经济、生态补偿。","usage":"对策句式：推动绿色化生产、建立生态补偿机制、发展循环经济、倡导绿色低碳生活方式。"},{"id":"sci","name":"科技创新与人才","intro":"高频矛盾是“引进与自主”“引才与用才”，要写出从“输血”到“造血”的转变。","usage":"对策句式：提升自主创新能力、破解“卡脖子”、柔性引才、以老带新、促进成果转化。"},{"id":"law","name":"法治建设与执法监管","intro":"执法类材料必背“严格规范公正文明执法”一整句，以及柔性执法、联合执法、精准监管。","usage":"对策句式：坚持严格规范公正文明执法、压实平台主体责任、提高违法成本、推进联合执法。"},{"id":"sty","name":"干部作风与基层减负","intro":"“不作为、慢作为、乱作为、不善为”是四胞胎，必须按材料的具体表现精确区分。","usage":"对策句式：整治形式主义、为基层减负、健全容错纠错机制、坚持严管和厚爱相结合。"},{"id":"soc","name":"社会心态与文明素养","intro":"多用于分析原因，抓心理动因：从众、逆反、面子、攀比、陌生人社会。","usage":"分析句式：折射出……心理；根源在于……；需加强引导，培育理性平和的社会心态。"},{"id":"econ","name":"经济消费与市场秩序","intro":"市场类材料抓“竞争秩序、供需结构、消费升级”三条线，注意区分现象与本质。","usage":"对策句式：维护公平竞争、优化营商环境、释放消费潜力、推动供需高水平动态平衡。"}],"items":[{"id":"gov-1","c":"gov","s":"市民在手机上就能办完社保、公积金等全部审批事项。","t":"掌上办／指尖办","a":["掌上办","指尖办"],"tip":"载体是手机、App，关键词“不用跑”","w":["一站式办理","延时服务","代办服务"]},{"id":"gov-2","c":"gov","s":"过去办营业执照要跑五个部门、交三套材料，现在一个窗口一次办结。","t":"一站式服务／只跑一趟","a":["一站式服务","一站式办理","只跑一趟"],"tip":"一个窗口、一次办结","w":["限时办结","首问负责","告知承诺制"]},{"id":"gov-3","c":"gov","s":"群众登录政务平台提交材料，全程网上审批，不用再到大厅。","t":"一网通办／全程网办","a":["一网通办","全程网办"],"tip":"全流程线上，无需线下","w":["掌上办","自助办理","线上预约"]},{"id":"gov-4","c":"gov","s":"政府部门成立了优化营商环境办公室，明确各科室职责分工。","t":"成立机构、完善组织架构","a":["成立机构","完善组织架构","健全组织机构"],"tip":"搭架子、定职责","w":["转变政府职能","优化职能配置","组建工作专班"]},{"id":"gov-5","c":"gov","s":"以前等着群众上门办事，现在干部主动送政策、送服务上门。","t":"转变执政理念／主动服务群众","a":["转变执政理念","主动服务群众","主动服务"],"tip":"从“等上门”到“送上门”","w":["转变工作作风","提升服务效能","下沉服务"]},{"id":"gov-6","c":"gov","s":"社区承担民事调解、民政残联、劳动保障等几十项事务。","t":"工作职责广／职能繁杂","a":["工作职责广","职能繁杂","职责繁多"],"tip":"事务多、条线多","w":["权责不明","职能交叉","工作负担重"]},{"id":"gov-7","c":"gov","s":"同一项工作，城管、公安、市场监管等多个部门一起处理、互相配合。","t":"多部门联动／联合执法","a":["多部门联动","联合执法","部门联动"],"tip":"多主体、同处理","w":["各自为政","条块分割","专项治理"]},{"id":"gov-8","c":"gov","s":"出了问题，谁来主管、谁来执行、各自管什么，都还不明确。","t":"权责不明／多头管理","a":["权责不明","多头管理","责任主体不明"],"tip":"没人负责、都能管","w":["职责交叉","监管缺位","责任下沉"]},{"id":"gov-9","c":"gov","s":"群众在网上留言反映问题，工作人员当天就回应并处理。","t":"及时回应／接诉即办","a":["及时回应","接诉即办","及时处理"],"tip":"快回应、马上办","w":["限时办结","主动公开","跟踪督办"]},{"id":"gov-10","c":"gov","s":"同一个事项，隔三岔五就有不同部门来检查，基层疲于应付。","t":"督查频繁／检查过多过频","a":["督查频繁","检查过多过频","检查过多"],"tip":"频次高、多头查","w":["监管严格","专项整治","多头执法"]},{"id":"gov-11","c":"gov","s":"这项政策不是一阵风，而是连续多年坚持推行。","t":"常态化／建立长效机制","a":["常态化","建立长效机制","长效机制"],"tip":"长久坚持、非运动式","w":["阶段性推进","专项行动","集中整治"]},{"id":"city-12","c":"city","s":"H市针对不同区域设定不同亮度，生态良好区域只保留功能性路灯。","t":"分区分级管控／精细化管理","a":["分区分级管控","精细化管理"],"tip":"按区域分类施策","w":["统一管理","专项整治","整体规划"]},{"id":"city-13","c":"city","s":"智慧照明系统实时显示配电箱状态、亮灯时间、能耗等数据。","t":"数字化管理／智慧化监管","a":["数字化管理","智慧化监管"],"tip":"数据上屏、实时监测","w":["网格化管理","精细化管理","信息公开"]},{"id":"city-14","c":"city","s":"路灯故障可精准定位，维修人员及时到位，人工巡查频率反而下降。","t":"提高管理效率／降低人力成本","a":["提高管理效率","降低人力成本"],"tip":"效率升、人工降","w":["完善基础设施","加强日常维护","扩大监控范围"]},{"id":"city-15","c":"city","s":"5G灯杆集安防监控、空气质量监测、报警、信息发布等功能于一体。","t":"设施多功能集成","a":["设施多功能集成","多功能集成"],"tip":"一杆多用","w":["加大投入","技术升级","综合执法"]},{"id":"city-16","c":"city","s":"城市照明规划综合考虑自然地理、历史文化，呈现各区域独特气质。","t":"因地制宜／整体规划","a":["因地制宜","整体规划"],"tip":"结合本地禀赋","w":["统一标准","同质化建设","形象工程"]},{"id":"city-17","c":"city","s":"居民区设置柔和灯光，避免对居民休息造成干扰。","t":"人性化设计／以人为本","a":["人性化设计","以人为本"],"tip":"照顾居民感受","w":["亮化工程","美化环境","节能改造"]},{"id":"city-18","c":"city","s":"下一步聚焦老旧小区、背街小巷的路灯照明“暗盲区”开展整治。","t":"补齐民生短板／专项整治","a":["补齐民生短板","专项整治"],"tip":"补短板、治盲区","w":["形象工程","面子工程","集中整治"]},{"id":"city-19","c":"city","s":"灯光是亮一点还是暗一点，众口难调，居民诉求各不相同。","t":"诉求多元／众口难调","a":["诉求多元","众口难调"],"tip":"利益诉求分化","w":["缺乏共识","参与度低","意见分散"]},{"id":"ind-20","c":"ind","s":"从一个人干到一群人干，从个体户干到成立公司。","t":"规模化、产业化","a":["规模化","产业化","规模化产业化"],"tip":"从小散到规模","w":["市场化","集约化","专业化"]},{"id":"ind-21","c":"ind","s":"在原有产业基础上向上下游拓展，既种植又加工、销售。","t":"延伸产业链","a":["延伸产业链","延长产业链"],"tip":"向上下游走","w":["产业融合","产业集聚","多元化经营"]},{"id":"ind-22","c":"ind","s":"农业、工业、服务业齐头并进、水乳交融。","t":"产业融合","a":["产业融合","融合发展"],"tip":"多产业交叉","w":["产业升级","产业集聚","产业转移"]},{"id":"ind-23","c":"ind","s":"市场上的同类产品在性能、设计上大致相同，差异很小。","t":"同质化","a":[],"tip":"千品一面","w":["标准化","低端化","产能过剩"]},{"id":"ind-24","c":"ind","s":"企业坚持“人无我有、人有我优、人优我新”，不与对手雷同。","t":"错位竞争／差异化竞争","a":["错位竞争","差异化竞争"],"tip":"避开同质红海","w":["恶性竞争","品牌竞争","价格竞争"]},{"id":"ind-25","c":"ind","s":"企业由传统家族式管理转向按规则、按制度管理。","t":"创新管理模式／现代企业管理","a":["创新管理模式","现代企业管理"],"tip":"管理方式升级","w":["加强内部管理","完善规章制度","精细化管理"]},{"id":"ind-26","c":"ind","s":"让更懂年轻消费群体、更懂电商的人去负责线上运营。","t":"专业化运营","a":[],"tip":"专业人做专业事","w":["多元化经营","精细化管理","品牌化运营"]},{"id":"ind-27","c":"ind","s":"引进自动化设备后，车间不再人声鼎沸，用工数量大幅减少。","t":"机器换人／降低人力成本","a":["机器换人","降低人力成本"],"tip":"自动化替代人工","w":["技术升级","产能扩张","智能化改造"]},{"id":"ind-28","c":"ind","s":"一把手工剪刀成本上百元，老师傅一天最多做两把。","t":"生产成本高、效率低","a":[],"tip":"贵且慢","w":["工艺落后","产能不足","销路不畅"]},{"id":"ind-29","c":"ind","s":"市场上轻便耐用的不锈钢剪刀层出不穷，手工剪刀优势渐失。","t":"传统工艺式微／竞争力下降","a":["传统工艺式微","竞争力下降"],"tip":"优势被替代","w":["产品老化","技术落后","市场萎缩"]},{"id":"rur-30","c":"rur","s":"青壮年外出打工，村里只剩老人、妇女和儿童。","t":"农村空心化","a":["农村空心化","空心化"],"tip":"人走了、村空了","w":["人口外流","老龄化","留守问题"]},{"id":"rur-31","c":"rur","s":"大片土地无人种植，长满荒草。","t":"土地撂荒","a":["土地撂荒","撂荒"],"tip":"地没人种","w":["土地流转","耕地非农化","农业萎缩"]},{"id":"rur-32","c":"rur","s":"原来闲置荒废的土地，如今都利用起来，还产生了经济效益。","t":"盘活土地资源","a":["盘活土地资源","盘活闲置资源"],"tip":"闲置变收益","w":["土地整治","流转经营","集约用地"]},{"id":"rur-33","c":"rur","s":"村集体的收入主要靠一类种植业。","t":"村集体收入来源单一","a":[],"tip":"只靠一条腿","w":["产业基础薄弱","集体经济薄弱","经营方式粗放"]},{"id":"rur-34","c":"rur","s":"村民不用远走他乡，在家门口就找到就业岗位。","t":"就近就地就业","a":["就近就地就业","就近就业"],"tip":"家门口挣钱","w":["转移就业","返乡创业","灵活就业"]},{"id":"rur-35","c":"rur","s":"乡镇企业不断发展壮大，彻底解决了周边失业村民的就业问题。","t":"吸纳剩余劳动力","a":["吸纳剩余劳动力","吸纳劳动力"],"tip":"企业消化剩余劳力","w":["转移劳动力","劳务输出","技能培训"]},{"id":"rur-36","c":"rur","s":"村里的农家乐都是走老街、吃美食、看表演，模式几乎一样。","t":"同质化经营","a":[],"tip":"千村一面","w":["低端化经营","粗放经营","单一化经营"]},{"id":"rur-37","c":"rur","s":"村民坐等政府救济、争要低保、只靠上级财政拨款。","t":"“等靠要”思想","a":["等靠要","等靠要思想"],"tip":"等救济、要政策、靠上级","w":["内生动力不足","思想保守","被动接受"]},{"id":"rur-38","c":"rur","s":"优质教育、医疗资源向偏远乡镇输送。","t":"资源下沉","a":["资源下沉","优质资源下沉"],"tip":"往基层走","w":["资源整合","对口帮扶","均衡配置"]},{"id":"liv-39","c":"liv","s":"农村自建房办的家庭式养老院，没有办理合法手续就收住老人。","t":"非法运营／手续不全","a":["非法运营","手续不全"],"tip":"无证经营","w":["监管缺位","规范缺失","无序经营"]},{"id":"liv-40","c":"liv","s":"房子没有土地证、准建证，养老机构登记备案难。","t":"登记备案难","a":[],"tip":"手续补不齐","w":["资质不全","审批繁琐","手续补办难"]},{"id":"liv-41","c":"liv","s":"农村自建房不具备安装消防自动喷淋系统的条件。","t":"消防条件不达标","a":[],"tip":"硬件不达标","w":["设施简陋","安全隐患","标准过高"]},{"id":"liv-42","c":"liv","s":"按现行消防标准，这类家庭式小院极难百分百达标。","t":"标准与实际脱节","a":["标准与实际脱节","标准过高"],"tip":"标准“水土不服”","w":["执法不严","监管缺位","投入不足"]},{"id":"liv-43","c":"liv","s":"老人不愿去县里的养老院，说那里看不到花花草草，也没有认识的人。","t":"故土难离／归属感缺失","a":["故土难离","归属感缺失"],"tip":"离不开熟人乡土","w":["服务不适应","心理抵触","观念落后"]},{"id":"liv-44","c":"liv","s":"县里合规经营的民营养老机构已经没有床位。","t":"供给不足／一床难求","a":["供给不足","一床难求"],"tip":"需求大、床位少","w":["资源错配","价格过高","布局不合理"]},{"id":"liv-45","c":"liv","s":"父亲住县里公建民营养老院月费3700元，抵扣补贴后仍是他一个月收入。","t":"支付能力不足／费用负担重","a":["支付能力不足","费用负担重"],"tip":"住得起才算普惠","w":["收费不合理","补贴标准低","收入水平低"]},{"id":"liv-46","c":"liv","s":"养老院与镇卫生院合作，老人有病随时能请医生过来。","t":"医养结合","a":[],"tip":"养老+医疗","w":["分级诊疗","家庭医生签约","健康管理"]},{"id":"liv-47","c":"liv","s":"政府补贴更多倾向大型标准化机构，农村小微机构因难达标而无法获得支持。","t":"政策扶持不均衡","a":[],"tip":"偏心大机构","w":["补贴标准过高","扶持力度不足","资源错配"]},{"id":"liv-48","c":"liv","s":"利用农村闲置校舍、村集体用房改造成养老设施。","t":"盘活闲置资源","a":[],"tip":"闲置房再利用","w":["资源整合","设施改造","集约利用"]},{"id":"cul-49","c":"cul","s":"千层钢手工锻打技艺，如今一些技艺逐渐消失不见。","t":"传统工艺式微","a":["传统工艺式微","技艺式微"],"tip":"手艺在消失","w":["技艺失传","非遗保护不足","工艺落后"]},{"id":"cul-50","c":"cul","s":"手工织造的繁复纹理与灵动光泽，是机器无法复制的。","t":"手工技艺不可替代","a":["手工技艺不可替代","不可替代性"],"tip":"机器的“表面光鲜”","w":["工艺精湛","产品高端化","文化附加值"]},{"id":"cul-51","c":"cul","s":"五代传承的老织机，差点被提议变卖。","t":"技艺传承面临断代","a":[],"tip":"人走技失","w":["设备老化","传承人流失","转型受阻"]},{"id":"cul-52","c":"cul","s":"榫卯工艺承载着“天人合一”“道法自然”的传统哲学思想。","t":"传统文化内涵／工匠精神","a":["传统文化内涵","工匠精神"],"tip":"器物里的文化","w":["工艺价值","历史价值","审美价值"]},{"id":"cul-53","c":"cul","s":"老字号破产后，老师傅说我们丢掉的不仅是手艺，更是几代传承的文化瑰宝。","t":"文化根脉受损／品牌价值受损","a":["文化根脉受损","品牌价值受损"],"tip":"断的是文脉","w":["技艺失传","经营失败","市场淘汰"]},{"id":"cul-54","c":"cul","s":"修缮老屋时保留各村不同之处，让每座老屋都有独一无二的“画像”。","t":"修旧如旧／整体性保护","a":["修旧如旧","整体性保护"],"tip":"原样原修","w":["统一改造","风貌整治","保护性开发"]},{"id":"cul-55","c":"cul","s":"各种佳节越来越缺少韵味，大家觉得传统文化索然无味。","t":"传统文化式微","a":[],"tip":"节味淡了","w":["节日氛围淡化","文化认同弱化","民俗流失"]},{"id":"cul-56","c":"cul","s":"一些文化活动只是虚有其表，为活动“排场”搞些看似新颖的形式。","t":"重形式、轻内涵","a":["重形式轻内涵","重形式、轻内涵"],"tip":"有排场没内容","w":["形式主义","铺张浪费","脱离群众"]},{"id":"eco-57","c":"eco","s":"生态良好区域仅保留功能性照明，不允许设置景观照明灯。","t":"分区保护／源头控污","a":["分区保护","源头控污","分区管控"],"tip":"划区、控源头","w":["统一管理","专项整治","生态修复"]},{"id":"eco-58","c":"eco","s":"传统路灯全部替换为太阳能路灯，每年可减少上万吨二氧化碳排放。","t":"清洁能源替代／节能减排","a":["清洁能源替代","节能减排"],"tip":"换能源、减排放","w":["绿色照明","技术改造","资源节约"]},{"id":"eco-59","c":"eco","s":"以GDP为衡量政绩首要标准，无视污染严重的企业。","t":"重经济、轻环境","a":["重经济轻环境","重经济、轻环境"],"tip":"唯GDP","w":["政绩观偏差","监管缺位","发展方式粗放"]},{"id":"eco-60","c":"eco","s":"坚持“边污染、边治理”“先污染、后治理”的发展道路。","t":"先污染后治理","a":["先污染后治理","边污染边治理"],"tip":"走弯路","w":["粗放发展","急功近利","短视行为"]},{"id":"eco-61","c":"eco","s":"果园种草、草喂猪、猪粪入池制沼、沼肥防虫肥田。","t":"循环经济","a":[],"tip":"闭环利用","w":["生态农业","清洁生产","资源综合利用"]},{"id":"eco-62","c":"eco","s":"灰土垃圾填坑、厨余垃圾堆肥、白色垃圾生产日用品。","t":"垃圾分类与资源化利用","a":["垃圾分类","资源化利用"],"tip":"分类+变资源","w":["垃圾清运","焚烧处理","卫生填埋"]},{"id":"eco-63","c":"eco","s":"部分地区的山水、空气、树木等资源被提前消耗殆尽。","t":"透支资源","a":[],"tip":"吃子孙饭","w":["资源浪费","过度开发","生态破坏"]},{"id":"eco-64","c":"eco","s":"洪涝、滑坡、泥石流等灾害多发。","t":"地质灾害多发","a":[],"tip":"天灾频仍","w":["气候异常","生态脆弱","防灾能力弱"]},{"id":"sci-65","c":"sci","s":"以前使用其他国家的技术，现在自己研发出新技术。","t":"自主研发／自主创新","a":["自主研发","自主创新"],"tip":"不再靠别人","w":["技术引进","成果转化","技术改造"]},{"id":"sci-66","c":"sci","s":"高端产品开发技术绝大部分依靠外援，大部分核心技术需要进口。","t":"核心技术对外依存度高","a":["核心技术对外依存度高","对外依存度高"],"tip":"命门在别人手里","w":["自主创新能力弱","技术封锁","产业空心化"]},{"id":"sci-67","c":"sci","s":"95%的关键制造及检测设备依赖进口。","t":"关键设备依赖进口","a":[],"tip":"设备卡脖子","w":["设备落后","产业链不完整","技术差距"]},{"id":"sci-68","c":"sci","s":"我国引进和消化吸收的比例为3:1，而日韩约为1:3。","t":"消化吸收能力不足","a":[],"tip":"只引进不消化","w":["技术引进不足","研发投入低","成果转化率低"]},{"id":"sci-69","c":"sci","s":"通过聘请专家学者、培养后备人才，给队伍注入新鲜血液。","t":"人才队伍建设","a":[],"tip":"引才+育才","w":["扩大招聘","加强培训","完善激励"]},{"id":"sci-70","c":"sci","s":"突破国籍、户籍、地域、人事关系等刚性约束，坚持以用为本引才。","t":"柔性引才","a":[],"tip":"不求所有、但求所用","w":["精准引才","组团引才","政策引才"]},{"id":"sci-71","c":"sci","s":"优秀老员工退休后，年轻员工还不会操作处理。","t":"人才断层","a":[],"tip":"老的退了、小的接不上","w":["培训不足","经验不足","队伍老化"]},{"id":"sci-72","c":"sci","s":"引才政策大多是买房打折、租房补贴、落户降标、一次性奖励。","t":"引才政策物质化","a":[],"tip":"只给钱不给舞台","w":["引才政策同质化","重引进轻使用","政策力度不足"]},{"id":"law-73","c":"law","s":"执法时“睁一只眼、闭一只眼”。","t":"执法不严","a":[],"tip":"该严不严","w":["监管缺位","包庇纵容","以罚代管"]},{"id":"law-74","c":"law","s":"运用打、砸、抢、掀、抓、吼、骂的方式对待商贩。","t":"暴力执法","a":[],"tip":"动手动粗","w":["粗暴管理","执法不当","过度执法"]},{"id":"law-75","c":"law","s":"眼神执法、围观执法、鲜花执法。","t":"柔性执法","a":[],"tip":"不硬来、有温度","w":["联合执法","专项执法","智慧执法"]},{"id":"law-76","c":"law","s":"违法后只会被通报批评，偶尔罚一点小钱，就像“挠痒痒”。","t":"违法成本低","a":[],"tip":"罚不当过","w":["处罚偏轻","执法不严","监管缺位"]},{"id":"law-77","c":"law","s":"制定政策时不考虑实际，采用“一律拒绝”“各地都必须”的做法。","t":"政策一刀切","a":["政策一刀切","一刀切"],"tip":"不看实际、统一硬套","w":["缺乏弹性","标准过严","层层加码"]},{"id":"law-78","c":"law","s":"法律法规落实存在“振臂高呼、掷地无声”的现象。","t":"政策落实不到位","a":[],"tip":"喊得响、落得空","w":["普法不足","监督缺位","制度不完善"]},{"id":"law-79","c":"law","s":"平台要承担起对内容审核的主体责任。","t":"压实平台主体责任","a":["平台主体责任","压实平台主体责任"],"tip":"平台不能甩锅","w":["加强行业自律","政府监管","社会监督"]},{"id":"law-80","c":"law","s":"城管、公安、市场监管等多部门共同执法。","t":"联合执法","a":[],"tip":"多部门一起上","w":["委托执法","属地管理","专项行动"]},{"id":"sty-81","c":"sty","s":"某些干部一天到晚瞎折腾，光整这些虚的。","t":"形式主义","a":[],"tip":"虚功","w":["官僚主义","弄虚作假","作风漂浮"]},{"id":"sty-82","c":"sty","s":"基层干部经常开会、经常加班，文件成堆。","t":"文山会海","a":[],"tip":"会多文多","w":["工作负担重","督查检查多","留痕管理"]},{"id":"sty-83","c":"sty","s":"遇到问题推诿扯皮、“踢皮球”，工作消极、得过且过。","t":"不作为","a":[],"tip":"不干事","w":["乱作为","不善为","假作为"]},{"id":"sty-84","c":"sty","s":"权力任性使用，瞎指挥、乱拍板。","t":"乱作为","a":[],"tip":"乱干事","w":["不作为","慢作为","不善为"]},{"id":"sty-85","c":"sty","s":"工作人员处理某些事情时缺少能力，效率也不行。","t":"不善为","a":[],"tip":"不会干","w":["不作为","乱作为","慢作为"]},{"id":"sty-86","c":"sty","s":"鼓励年轻干部积极作为，允许一些可接受的错误发生。","t":"容错纠错机制","a":["容错纠错机制","容错纠错"],"tip":"允许试错","w":["激励机制","考核机制","问责机制"]},{"id":"sty-87","c":"sty","s":"全面从严治党的同时关爱同志，在心理上疏导、在行动上帮扶。","t":"严管和厚爱相结合","a":["严管厚爱","严管和厚爱相结合"],"tip":"一手严一手暖","w":["奖惩分明","关心关爱","从严管理"]},{"id":"sty-88","c":"sty","s":"领导干部第一时间赶赴现场、带头做事。","t":"领导带头／一线工作法","a":["领导带头","一线工作法"],"tip":"关键少数先上","w":["示范引领","责任到人","督查督办"]},{"id":"soc-89","c":"soc","s":"看周围的朋友们都做了，于是自己也想来尝试。","t":"从众心理","a":[],"tip":"别人做我也做","w":["攀比心理","好奇心理","侥幸心理"]},{"id":"soc-90","c":"soc","s":"你越让我干什么，我越不干什么。","t":"逆反心理","a":[],"tip":"反着来","w":["抵触情绪","从众心理","焦虑心理"]},{"id":"soc-91","c":"soc","s":"有些尚未脱贫的人家也“打肿脸充胖子”，掏空家底撑场子。","t":"面子心理／虚荣心","a":["面子心理","虚荣心"],"tip":"死要面子","w":["攀比心理","从众心理","侥幸心理"]},{"id":"soc-92","c":"soc","s":"乐于体验“刷卡”带来的先花费后还款的快感。","t":"超前消费","a":[],"tip":"花明天的钱","w":["信贷消费","冲动消费","攀比消费"]},{"id":"soc-93","c":"soc","s":"我们生活的世界几乎被陌生人所充斥，我们也是陌生人。","t":"陌生人社会","a":[],"tip":"熟人社会解体","w":["人情社会","流动性强","社会疏离"]},{"id":"econ-94","c":"econ","s":"某些企业一心找机会抹黑其他企业，把别人拉下来自己爬上去。","t":"恶性竞争","a":[],"tip":"互踩式竞争","w":["同质化竞争","价格战","行业垄断"]},{"id":"econ-95","c":"econ","s":"为完成招商引资任务，对投资方不加甄别，什么公司都接受。","t":"盲目招商／招商门槛低","a":["盲目招商","招商门槛低"],"tip":"捡到篮里都是菜","w":["招商同质化","重招商轻服务","产业低端化"]},{"id":"econ-96","c":"econ","s":"随便什么人都能做，资质没有任何要求。","t":"准入门槛低","a":[],"tip":"谁都能进","w":["监管缺位","标准缺失","行业不规范"]},{"id":"econ-97","c":"econ","s":"金融机构放宽企业贷款的资质与条件。","t":"降低融资门槛","a":[],"tip":"贷款更容易","w":["加大信贷投放","财政贴息","信用贷款"]},{"id":"econ-98","c":"econ","s":"通过贷款、股票、债券等多种方式筹集资金。","t":"拓宽融资渠道","a":[],"tip":"多条腿筹资","w":["降低融资门槛","加大投入","资本运作"]},{"id":"econ-99","c":"econ","s":"各类企业的信用程度按“四等十级制”进行划分。","t":"信用分级管理","a":[],"tip":"按信用定等级","w":["失信惩戒","信用修复","名单管理"]},{"id":"econ-100","c":"econ","s":"市场出现供需错位，劣质低端产品泛滥，优质高端产品匮乏。","t":"供需结构性失衡","a":[],"tip":"低端多、高端少","w":["产能过剩","消费不足","产品低端化"]}]};
+const WKEY = "shenlun_quiz_wrong_v1", HKEY = "shenlun_quiz_history_v1";
+let wrongBook = JSON.parse(localStorage.getItem(WKEY) || "{}");
+let history = JSON.parse(localStorage.getItem(HKEY) || "[]");
+const $ = id => document.getElementById(id);
+const catName = id => (DATA.cats.find(c=>c.id===id)||{}).name || id;
+
+let queue = [], idx = 0, first = 0, hinted = 0, wrong = 0, stage = "ask", hintUsed = false, cur = null;
+let missed = new Set();
+
+// 首页
+$("catChips").innerHTML = [{id:"all",name:"全部"}].concat(DATA.cats.map(c=>({id:c.id,name:c.name})))
+  .map(c=>`<button class="chip ${c.id==='all'?'on':''}" data-cat="${c.id}">${c.name}</button>`).join("");
+$("catChips").addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  document.querySelectorAll("#catChips .chip").forEach(x=>x.classList.toggle("on",x===b));
+});
+function selectedCat(){ const b=document.querySelector("#catChips .chip.on"); return b?b.dataset.cat:"all"; }
+function refreshHome(){
+  $("wrongCount").textContent = Object.keys(wrongBook).length;
+  if(history.length){
+    const h = history[history.length-1];
+    $("history").textContent = `上次：${h.date}，${h.total} 题，一次答对 ${h.first} 题（${Math.round(h.first/h.total*100)}%）。历史共 ${history.length} 轮。`;
+  } else $("history").textContent = "";
+}
+refreshHome();
+
+function buildQueue(cat, onlyWrong){
+  let list = DATA.items.slice();
+  if(onlyWrong) list = list.filter(x=>wrongBook[x.id]);
+  else if(cat!=="all") list = list.filter(x=>x.c===cat);
+  shuffle(list);
+  return list;
+}
+function startRound(list){
+  queue = list; idx=0; first=0; hinted=0; wrong=0; missed = new Set();
+  $("home").style.display="none"; $("result").style.display="none"; $("quiz").style.display="block";
+  renderQ();
+}
+$("start").onclick = ()=> startRound(buildQueue(selectedCat(), false));
+$("reviewWrong").onclick = ()=>{
+  const list = buildQueue("all", true);
+  if(!list.length){ alert("错题本是空的，先刷一轮吧。"); return; }
+  startRound(list);
+};
+
+function renderQ(){
+  cur = queue[idx]; stage="ask"; hintUsed=false;
+  $("fb").className="fb"; $("fb").innerHTML="";
+  $("nextRow").style.display="none"; $("savedTip").textContent="";
+  $("qpos").textContent = `第 ${idx+1} / ${queue.length} 题`;
+  $("qscore").textContent = `一次答对 ${first} · 提示后 ${hinted} · 未掌握 ${wrong}`;
+  $("qcat").textContent = catName(cur.c);
+  $("qidx").textContent = cur.id.split("-")[1] ? "#" + cur.id.split("-")[1] : "";
+  $("qsent").textContent = cur.s;
+  $("qhint").textContent = "写出这一句对应的规范表达（2—8 个字）";
+  const inp = $("ans"); inp.value=""; inp.disabled=false; inp.focus();
+  $("bar").value = Math.round(idx/queue.length*100);
+  $("submit").disabled=false; $("hint").disabled=false; $("skip").disabled=false;
+}
+
+function norm(s){ return (s||"").replace(/[\s\p{P}\p{S}]/gu, "").replace(/[A-Za-z0-9]/g, m=>m).toLowerCase(); }
+function variants(q){
+  const arr = [q.t].concat(q.a||[]);
+  const out = new Set();
+  arr.forEach(v=>{
+    v.split(/[／/、，,（）()]/).forEach(p=>{ const n=norm(p); if(n) out.add(n); });
+    const n=norm(v); if(n) out.add(n);
+  });
+  return [...out];
+}
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,i)=>i), cur=[];
+  for(let i=1;i<=m;i++){ cur[0]=i;
+    for(let j=1;j<=n;j++) cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    [prev,cur]=[cur,prev];
+  }
+  return prev[n];
+}
+function isRight(input, q){
+  const u = norm(input); if(!u) return false;
+  for(const v of variants(q)){ if(u===v) return true; }
+  return false;
+}
+
+$("submit").onclick = submitAnswer;
+$("ans").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); if(stage==="ask") submitAnswer(); else $("next").click(); } });
+
+function submitAnswer(){
+  if(stage!=="ask") return;
+  const val = $("ans").value.trim();
+  if(!val){ $("ans").focus(); $("qhint").textContent="先写一个答案再提交；实在不会，点“给点提示”或“跳过”。"; return; }
+  if(isRight(val, cur)){
+    stage="done"; missed.delete(cur.id);
+    $("ans").disabled=true; $("submit").disabled=true; $("hint").disabled=true; $("skip").disabled=true;
+    if(hintUsed){ hinted++; } else { first++; }
+    $("fb").className="fb ok";
+    $("fb").innerHTML = `<div>✓ 答对了</div><p style="margin:6px 0 0">规范表达：<b>${cur.t}</b></p><p class="mini">${cur.tip}</p>`;
+    finishQ();
+  } else {
+    stage="option";
+    $("ans").disabled=true; $("submit").disabled=true; $("hint").disabled=true;
+    $("fb").className="fb no";
+    $("fb").innerHTML = `<div>✗ 差一点，不是这个说法</div><p class="mini" style="margin:4px 0 0">从下面四个选项里选出规范表达：</p><div class="opts" id="opts"></div>`;
+    const opts = [cur.t.split(/[／/]/)[0]].concat(cur.w).map(s=>s.trim());
+    shuffle(opts);
+    $("opts").innerHTML = opts.map((o,i)=>`<button class="opt" data-o="${o}"><span class="k">${"ABCD"[i]}</span>${o}</button>`).join("");
+    $("opts").addEventListener("click", ev=>{
+      const b = ev.target.closest(".opt"); if(!b) return;
+      const good = isRight(b.dataset.o, cur);
+      document.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+      b.classList.add(good?"right":"wrong");
+      if(good){
+        hinted++; missed.delete(cur.id);
+        $("fb").className="fb ok";
+        $("fb").innerHTML = `<div>✓ 选对了（提示后掌握）</div><p style="margin:6px 0 0">规范表达：<b>${cur.t}</b></p><p class="mini">${cur.tip}</p>`;
+      } else {
+        document.querySelectorAll(".opt").forEach(x=>{ if(isRight(x.dataset.o,cur)) x.classList.add("right"); });
+        $("fb").className="fb no";
+        $("fb").innerHTML = `<div>还是不对，正确答案是</div><p class="term" style="margin:6px 0 0">${cur.t}</p><p class="mini">${cur.tip}</p>`;
+        wrong++; missed.add(cur.id); addWrong(cur.id);
+      }
+      stage="done";
+      finishQ();
+    });
+  }
+}
+$("hint").onclick = ()=>{
+  if(stage!=="ask") return;
+  hintUsed = true;
+  $("fb").className="fb tip";
+  $("fb").innerHTML = `<div>提示</div><p class="mini" style="margin:6px 0 0">${cur.tip}｜答案共 ${[...cur.t.replace(/[／/、，（）()]/g,"")].length} 个字（含分隔符则按常见搭配写）</p>`;
+};
+$("skip").onclick = ()=>{
+  if(stage==="done") return;
+  wrong++; missed.add(cur.id); addWrong(cur.id); stage="done";
+  $("ans").disabled=true; $("submit").disabled=true; $("hint").disabled=true; $("skip").disabled=true;
+  $("fb").className="fb no";
+  $("fb").innerHTML = `<div>本题跳过，正确答案是</div><p class="term" style="margin:6px 0 0">${cur.t}</p><p class="mini">${cur.tip}</p>`;
+  finishQ();
+};
+function finishQ(){
+  $("nextRow").style.display="flex";
+  $("qscore").textContent = `一次答对 ${first} · 提示后 ${hinted} · 未掌握 ${wrong}`;
+  $("next").textContent = (idx===queue.length-1) ? "查看本轮结果 →" : "下一题 →";
+  $("bar").value = Math.round((idx+1)/queue.length*100);
+}
+$("next").onclick = ()=>{
+  if(idx < queue.length-1){ idx++; renderQ(); }
+  else showResult();
+};
+function addWrong(id){
+  wrongBook[id] = (wrongBook[id]||0) + 1;
+  localStorage.setItem(WKEY, JSON.stringify(wrongBook));
+  $("savedTip").textContent = "已加入错题本";
+}
+function showResult(){
+  $("quiz").style.display="none"; $("result").style.display="block";
+  const total = queue.length;
+  const rate = Math.round(first/total*100);
+  $("rate").textContent = rate + "%";
+  $("rFirst").textContent = first; $("rHint").textContent = hinted; $("rWrong").textContent = wrong;
+  const wrongSet = queue.filter(x => missed.has(x.id));
+  $("wrongList").innerHTML = wrongSet.length
+    ? wrongSet.map(x=>`<div class="wrongItem"><p><b>${x.t}</b></p><p class="small">${x.s}</p><p class="small">${x.tip}｜累计错 ${wrongBook[x.id]||0} 次</p></div>`).join("")
+    : `<p class="small">本轮没有错题，状态不错。</p>`;
+  history.push({date:new Date().toLocaleDateString("zh-CN"), total, first});
+  localStorage.setItem(HKEY, JSON.stringify(history.slice(-20)));
+  refreshHome();
+}
+$("againWrong").onclick = ()=>{
+  const list = DATA.items.filter(x=>wrongBook[x.id]);
+  if(!list.length) return alert("没有错题可练。");
+  shuffle(list); startRound(list);
+};
+$("againAll").onclick = ()=> { startRound(buildQueue(selectedCat(), false)); };
+$("home2").onclick = ()=>{ $("result").style.display="none"; $("home").style.display="block"; refreshHome(); };
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} }
+</script>
+</body></html>

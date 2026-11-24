@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申论大作文框架训练</title>
+<style>
+:root{
+  --ink:#1c2430; --sub:#5b6675; --line:#e4e8ee; --bg:#f6f7f9; --card:#ffffff;
+  --main:#1f5f9e; --main-soft:#eaf2fa; --warn:#b45309; --ok:#0f766e; --bad:#b91c1c;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+header{padding:6px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+h1{font-size:24px;margin:0 0 8px;letter-spacing:.5px}
+header p{margin:0;color:var(--sub);font-size:14px}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:start}
+@media (max-width:900px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.side h2{font-size:15px;margin:0 0 12px;color:var(--main)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;
+  padding:4px 10px;font-size:12.5px;cursor:pointer}
+.tab.active{background:var(--main);color:#fff;border-color:var(--main)}
+.qlist{display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow:auto}
+.qitem{text-align:left;border:1px solid var(--line);background:#fff;border-radius:8px;
+  padding:8px 10px;cursor:pointer;font-size:13px;color:var(--ink);line-height:1.5}
+.qitem:hover{border-color:#b9d3ea}
+.qitem.active{background:var(--main-soft);border-color:var(--main)}
+.qitem small{display:block;color:var(--sub);font-size:11.5px;margin-top:2px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+button.primary{background:var(--main);color:#fff;border:none;border-radius:8px;padding:9px 14px;
+  cursor:pointer;font-size:14px}
+button.ghost{background:#fff;color:var(--main);border:1px solid var(--main);border-radius:8px;
+  padding:9px 14px;cursor:pointer;font-size:14px}
+button.gray{background:#fff;color:var(--sub);border:1px solid var(--line);border-radius:8px;
+  padding:9px 14px;cursor:pointer;font-size:14px}
+button:hover{filter:brightness(.97)}
+.q-head{background:var(--main-soft);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.q-head .cat{display:inline-block;background:#fff;color:var(--main);border-radius:999px;
+  font-size:12px;padding:2px 10px;margin-bottom:8px}
+.q-head h3{margin:0 0 8px;font-size:17px;line-height:1.6}
+.q-head p{margin:0;color:var(--sub);font-size:13.5px}
+.field{margin-bottom:14px}
+label{display:block;font-size:13.5px;color:var(--main);font-weight:600;margin-bottom:5px}
+label span{font-weight:400;color:var(--sub);font-size:12px}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;
+  padding:9px 11px;font-size:14px;font-family:inherit;line-height:1.7;background:#fff;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--main);box-shadow:0 0 0 3px #eaf2fa}
+.counter{text-align:right;font-size:11.5px;color:var(--sub);margin-top:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.row{grid-template-columns:1fr}}
+.ref{display:none;margin-top:20px}
+.ref.show{display:block}
+.ref-card{background:#fbfcfe;border:1px solid #d8e6f3;border-radius:12px;padding:16px;margin-bottom:14px}
+.ref-card h4{margin:0 0 8px;font-size:15px;color:var(--main)}
+.ref-card ol,.ref-card ul{margin:6px 0 0 18px;padding:0}
+.ref-card li{margin-bottom:6px;font-size:13.8px}
+.thesis{background:#fff;border-left:3px solid var(--main);padding:8px 12px;border-radius:6px;
+  font-size:14px;margin:6px 0}
+.pt{border-top:1px dashed var(--line);padding-top:10px;margin-top:10px}
+.pt b{color:var(--ink)}
+.pt p{margin:4px 0;font-size:13.6px;color:var(--sub)}
+.pt p em{color:var(--ok);font-style:normal}
+.pit{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 12px;
+  font-size:13.4px;color:#7c2d12;margin-top:10px}
+.logic{margin-top:12px}
+.logic h4{margin:0 0 8px;font-size:15px}
+.logic .step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.logic .num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12px}
+.logic .txt{font-size:13.6px;color:var(--sub)}
+.logic .txt b{color:var(--ink)}
+.checklist{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:14px}
+.checklist h4{margin:0 0 8px;font-size:14px}
+.checklist label{display:flex;gap:8px;align-items:flex-start;font-weight:400;color:var(--ink);
+  font-size:13.5px;margin-bottom:6px;cursor:pointer}
+.checklist input{width:16px;height:16px;margin-top:3px;flex:0 0 auto}
+.score{font-size:13px;color:var(--sub);margin-top:6px}
+.tip{font-size:12.5px;color:var(--sub);margin-top:10px;line-height:1.6}
+footer{margin-top:26px;color:var(--sub);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>申论大作文 · 框架训练场</h1>
+    <p>先写骨架，再看参考。每题只练“标题—中心论点—三个分论点—论据—结尾”，写完对照讲解，最后过一遍自检清单。</p>
+  </header>
+
+  <div class="layout">
+    <aside class="panel side">
+      <h2>题库（按类别筛选）</h2>
+      <div class="tabs" id="tabs"></div>
+      <div class="qlist" id="qlist"></div>
+      <div class="btns">
+        <button class="gray" id="randomBtn">随机抽一题</button>
+        <button class="gray" id="clearBtn">清空本题草稿</button>
+      </div>
+      <div class="tip">草稿自动保存在本机浏览器，关闭页面也不会丢；换电脑不通用。</div>
+    </aside>
+
+    <main>
+      <section class="panel" id="mainPanel">
+        <div class="q-head">
+          <span class="cat" id="catTag">—</span>
+          <h3 id="qTitle">请选择左侧题目</h3>
+          <p id="qPrompt"></p>
+        </div>
+
+        <div class="field">
+          <label>① 标题 <span>（先写 3 个备选，挑最贴题的一个）</span></label>
+          <input type="text" id="fTitle" placeholder="如：把服务做到群众心坎上">
+        </div>
+
+        <div class="field">
+          <label>② 中心论点 <span>（一句话，必须含题眼关键词）</span></label>
+          <textarea id="fThesis" rows="2" placeholder="我认为……关键在于……"></textarea>
+          <div class="counter" id="cThesis">0 字</div>
+        </div>
+
+        <div class="field">
+          <label>③ 分论点一 <span>（判断句，不要口号）</span></label>
+          <textarea id="fP1h" rows="1" placeholder="段首句"></textarea>
+          <textarea id="fP1e" rows="2" placeholder="支撑论据：用哪则材料？加一句分析（因果/对比/反面假设）"></textarea>
+        </div>
+
+        <div class="field">
+          <label>④ 分论点二</label>
+          <textarea id="fP2h" rows="1" placeholder="段首句"></textarea>
+          <textarea id="fP2e" rows="2" placeholder="支撑论据 + 分析"></textarea>
+        </div>
+
+        <div class="field">
+          <label>⑤ 分论点三</label>
+          <textarea id="fP3h" rows="1" placeholder="段首句"></textarea>
+          <textarea id="fP3e" rows="2" placeholder="支撑论据 + 分析"></textarea>
+        </div>
+
+        <div class="field">
+          <label>⑥ 结尾 <span>（回扣标题 + 一个意象 + 一句判断）</span></label>
+          <textarea id="fEnd" rows="2" placeholder="……"></textarea>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="refBtn">对照参考框架</button>
+          <button class="ghost" id="copyBtn">复制我的框架</button>
+          <button class="gray" id="saveBtn">保存草稿</button>
+        </div>
+
+        <div class="checklist">
+          <h4>交卷前自检（点击勾选）</h4>
+          <label><input type="checkbox" data-ck="1"><span>标题里有题眼关键词，不是泛泛的“奋进”“新篇”。</span></label>
+          <label><input type="checkbox" data-ck="2"><span>中心论点能回答题干的问题，不是把题干抄一遍。</span></label>
+          <label><input type="checkbox" data-ck="3"><span>三个分论点在同一层级、互不包含、句式相近。</span></label>
+          <label><input type="checkbox" data-ck="4"><span>每个分论点都有材料例证，且例证不超过两处、有分析。</span></label>
+          <label><input type="checkbox" data-ck="5"><span>至少有一段写了“反面假设”或“边界提醒”。</span></label>
+          <label><input type="checkbox" data-ck="6"><span>结尾回扣标题，没有喊新口号、没有引入新观点。</span></label>
+          <div class="score" id="score">已完成 0 / 6</div>
+        </div>
+
+        <div class="ref" id="refBox"></div>
+      </section>
+      <footer>题库取自 2022—2026 国考申论 15 套真题的作文题与同类变式 · 仅供训练使用</footer>
+    </main>
+  </div>
+</div>
+
+<script>
+const DATA = [
+{
+ id:"A1", cat:"基层治理", title:"为群众办好事、让群众感到好办事、把群众的事办好（2025 行政执法）",
+ prompt:"请围绕“为群众办好事”“让群众感到好办事”“把群众的事办好”写一篇文章。要求：观点明确，见解深刻；参考给定资料，但不拘泥于给定资料；1000—1200 字。",
+ hint:"材料可用：全天候医保窗口、税费驿站与 15 分钟办税圈、远程虚拟窗口、“办不成事”窗口、逸云路 32 盏灯三天亮起。",
+ ref:{
+  titles:["把服务做到群众心坎上","从“办好事”到“办好群众的事”","服务群众的三个“好”"],
+  thesis:"三个“好”是递进关系：为群众办好事是立场，让群众感到好办事是方法，把群众的事办好是标准，三者统一于人民满意。",
+  points:[
+   {head:"为群众办好事，首在立场——把群众的事当自己的事。",why:"解决“想不想办”的问题。",ev:"全天候窗口：全局轮岗、党员带头双休日办公；不能现场办的先收资料、留电话、工作日办结。反面：只按朝九晚五，群众就得在工作和办事之间二选一。"},
+   {head:"让群众感到好办事，重在方法——从群众视角重排流程。",why:"解决“顺不顺”的问题。",ev:"税费驿站进街道、一站式十几分钟办完；15 分钟办税圈与银行社区园区商超共建；远程虚拟窗口“数据多跑路”。"},
+   {head:"把群众的事办好，成在标准——闭环、实效、可检验。",why:"解决“成不成”的问题。",ev:"逸云路路灯：项目未移交无法通电→“办不成事”窗口当天回访、督促责任单位、干部夜查、三天 32 盏全亮；雨霞区以此倒逼担当。"}
+  ],
+  ending:"一盏灯、一张证、一个窗口，对群众就是日子。有立场、有方法、有结果，才是完整的为民服务。",
+  pitfalls:"把三个“好”写成同义反复；只写态度，不写机制和结果；三个分论点没有递进关系。",
+  logic:[
+   {t:"破题",d:"开头用三个材料场景对应三个“好”，一句话完成“场景—概念”的对接，不绕弯。"},
+   {t:"分层",d:"三层按“想办—好办—办成”递进：立场解决动机，方法解决体验，标准解决结果。顺序不能颠倒。"},
+   {t:"论证",d:"每段“判断句+材料例+反面假设+回扣”。反面假设是关键，它把“为什么必须这样”讲透。"},
+   {t:"收束",d:"结尾用三个具象（灯、证、窗口）落地，再回到“三者统一”，不喊新口号。"}
+  ]
+ }
+},
+{
+ id:"A2", cat:"基层治理", title:"由“无柜台、肩并肩”谈服务理念转变（2022 行政执法材料 2 变式）",
+ prompt:"某县为民服务中心撤掉服务柜台，推行“无柜台、肩并肩”帮办服务。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：咨询导办台+电脑桌、帮办员并排坐、群众全程可见；“铁路警察各管一段”；全科受理培训；“这里办”App 取号、云证通扫码无感智办；老冯说“有人有心理落差”。",
+ ref:{
+  titles:["撤掉心中的柜台","从“我管你”到“我帮你”","让服务近一点，再近一点"],
+  thesis:"撤掉柜台只是形式，真正的改革是撤掉“心中的柜台”——把管理者的角色惯性换成服务者的平等姿态，并用能力与体制支撑它。",
+  points:[
+   {head:"撤掉“眼中的柜台”，先让空间平等起来。",why:"形式变化带来心理变化。",ev:"咨询导办台迎上前、帮办员并排坐、全程可见操作；王女士“距离拉近”，小丁“交流顺畅”。"},
+   {head:"撤掉“心中的柜台”，要让观念真正转过来。",why:"习惯最难改。",ev:"有人有心理落差甚至抱怨；培训先行：高频事项答疑、材料审核、系统录入，做到“进一门、取一号、找一人、办成事”。"},
+   {head:"撤掉“心中的柜台”，还要拆掉部门之间的“墙”。",why:"无柜台=无差别全科受理。",ev:"“铁路警察各管一段”导致茫然失措；数字化补位（App 取号、扫码无感智办）+ 行政管理体制改革同步。"}
+  ],
+  ending:"柜台是物理的，隔阂是心理的。桌子搬走容易，心里的柜台拆掉很难；只要把群众放在心里，难事也能一件件做成。",
+  pitfalls:"只写“态度要好”；把“撤柜台”当成目的；忽略能力不足与部门壁垒这两个真问题。",
+  logic:[
+   {t:"辨义",d:"先分清“眼中的柜台”（物理窗口）与“心中的柜台”（观念、部门壁垒、能力短板），全文才有骨架。"},
+   {t:"递进",d:"空间→观念→体制，由表及里。第三层必须写，否则文章停在“微笑服务”。"},
+   {t:"防偏",d:"补一段“撤柜台不是目的”：自助机不会用、老人不方便，说明形式可减、服务不能减。"},
+   {t:"收束",d:"用“物理/心理”对照收尾，扣题最紧。"}
+  ]
+ }
+},
+{
+ id:"B1", cat:"经济产业", title:"小配件如何成为“市场中的主角”（2024 地市/执法）",
+ prompt:"隆金公司做的是汽车门把手，却成为行业领航者。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：1986 年起做门把手；质量改进团队；数字化车间效率+28%、成本-12%；295 项专利、95% 国产替代；市长质量奖、省名牌、主导行业标准、单项冠军；全国每 3 辆乘用车 1 辆在用。",
+ ref:{
+  titles:["做配件，也能当主角","以“专”立身，以“新”致远","把简单的事做到不简单"],
+  thesis:"小配件成为大主角，靠的是专注细分、严控质量、持续创新、以标准树品牌四者合力——把一件事做深，就是最宽的赛道。",
+  points:[
+   {head:"专注，是把简单的事做到不简单。",why:"细分领域做到极致，本身就有不可替代性。",ev:"30 多年只做门把手，“定位于能做得更好的事”；对比追风口、铺摊子的企业。"},
+   {head:"质量，是企业的生命线。",why:"门把手关系车门能否关严、能否打开，关系生命安全。",ev:"市场定位—设计研发—调试生产—质量审核全程序；质量改进团队收集问题、实施改进。"},
+   {head:"创新，是向上的梯子。",why:"没有研发，只能在低端代工。",ev:"每年数千万建数字化车间；企业研究院、博士后站、海外研发中心、200 多名人才；300 多项研发、295 项专利、95% 国产替代。"},
+   {head:"标准与品牌，是行业话语权。",why:"从“被选择”到“被需要”。",ev:"市长质量奖（2 亿→8 亿）、省名牌、主导行业标准、国家制造业单项冠军；N 市企业培育库与产业集群政策。"}
+  ],
+  ending:"不挑赛道大小，只看做得够不够深；不争一时快慢，只看根基扎得够不够稳。",
+  pitfalls:"只写“创新”，漏掉专注与质量；数据堆砌不作分析；把“单项冠军”当成口号。",
+  logic:[
+   {t:"设问",d:"开头用“一只门把手能有多大的名堂”设问，再用“全国每 3 辆就有 1 辆”回答，短而有劲。"},
+   {t:"加码",d:"四层不是平铺：专注让企业活下来，质量让客户敢用，创新让企业向上，标准让企业有话语权。"},
+   {t:"数据",d:"每段最多两个数字，且数字后面必须跟一句“这说明……”，否则就是罗列。"},
+   {t:"收束",d:"用两组对仗收尾，短句有力量。"}
+  ]
+ }
+},
+{
+ id:"B2", cat:"经济产业", title:"资源型城市如何转型（2023 副省 M 市材料变式）",
+ prompt:"“以煤起家”的 M 市，通过延长产业链发展功能性新材料，实现动能转换。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：煤→气化→合成气→甲醇→聚四氢呋喃→功能性新材料；腾夕材料考察 6 地后被诚意打动；项目书连夜研究次日送达；主要领导牵头领导小组、政企联合办公。",
+ ref:{
+  titles:["从一块煤到一条链","把比较优势变成竞争优势","转型，不是推倒重来"],
+  thesis:"资源型城市转型，不能抛开家底另起炉灶，而要立足优势延长链条、精准招商补上关键环、以诚意和机制留住企业，并照顾好转岗的人。",
+  points:[
+   {head:"转型首先要认清家底——在原赛道上跑出加速度。",why:"抛开优势另起炉灶，容易“悬空”。",ev:"咨询专家后决定延链提附加值；煤化工有基础、有工人、有配套，这是别处没有的比较优势。"},
+   {head:"延链要找准接口——招商是补链，不是捡菜。",why:"找到技术与产业的连接点，链条才长得出来。",ev:"煤→合成气→甲醇→聚四氢呋喃；腾夕的自主知识产权让“一块煤到各种功能性新材料”全链一体化。"},
+   {head:"留企要靠诚意与机制——营商环境是竞争力。",why:"引得进更要留得住。",ev:"项目书连夜加班、次日送达；配套需求当即协调、最优惠价格；政府投资按程序确立；主要领导牵头、政企联合办公。"},
+   {head:"转型还要照顾好“人”——让转岗不等于失业。",why:"产业升级会改变岗位结构。",ev:"老工人熟悉煤化工、未必熟悉新材料；需提前技能培训、转岗安置。"}
+  ],
+  ending:"把优势认清、把链条接长、把服务做实、把人照顾好，资源型城市才能在新旧动能转换中跑出自己的加速度。",
+  pitfalls:"写成“招商政策罗列”；只讲产业不讲人；把“转型”等同于“抛弃旧产业”。",
+  logic:[
+   {t:"立论",d:"开头直接说“不抛弃煤，而是把煤吃干榨净”，一反惯性思维，观点就立住了。"},
+   {t:"链条",d:"用技术链条作硬支撑，显示你真的读懂了材料，而不是空谈“延伸产业链”。"},
+   {t:"补人",d:"第四层写“人”，是区分普通答案与高分答案的地方。"},
+   {t:"收束",d:"回到“一块煤/一座城”，意象统一。"}
+  ]
+ }
+},
+{
+ id:"C1", cat:"文化传承", title:"传统文化的守正与创新（新民乐、非遗、窑洞材料）",
+ prompt:"有人说，传统要原汁原味地守；有人说，传统要大胆创新才有生命力。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：新民乐“创新不等于媚俗”“守本最重要”；窑洞修复用旧砖瓦、修旧如旧；清池村恢复烧奔塔、成人礼、乡村时装秀；凤凰河“文化的生命在于用”。",
+ ref:{
+  titles:["守其根，开其新","让传统在当代“活”起来","铁打内核，百变表达"],
+  thesis:"传统要活下去，必须守其根、开其新、用其活：守住文化内核，找到当代表达，让文化回到生活；三者缺一，传承就会落空。",
+  points:[
+   {head:"守其根，是守住文化内核。",why:"根断则形式再热闹也是空壳。",ev:"新民乐“创新不等于媚俗”“守本最重要”；窑洞修复保留自然地貌与院落原貌，用废弃砖瓦旧门窗，修旧如旧。"},
+   {head:"开其新，是找到当代表达。",why:"不变的传统会被时代搁置。",ev:"清池村恢复烧奔塔、成人礼并申遗；农具旧物上“T 台”办乡村时装秀；老物件与新中式家具组成生活场景。"},
+   {head:"用其活，是让文化回到生活。",why:"文化的生命在于“用”。",ev:"凤凰河水通后，生态旅游、文化旅游兴起，博物馆、“凤河游”App；非遗进校园、进社区、进景区。"}
+  ],
+  ending:"传统是一条河，不是一潭水。给它河道，它才不会泛滥；让它流动，它才有生命。",
+  pitfalls:"把“创新”写成“改造”；只讲保护不讲利用；通篇抒情没有做法；忽视“过度开发”的边界。",
+  logic:[
+   {t:"提炼",d:"开头三个材料场景并列，用“六个字”收口，快速建立分析框架。"},
+   {t:"递进",d:"守根（不改坏）→开新（让人懂）→用活（有人用），是从“保”到“传”再到“活”的完整链条。"},
+   {t:"边界",d:"补一段“创新要有边界”：把“现产”当遗产、以活化名义过度开发，都不是创新。"},
+   {t:"意象",d:"结尾用“河/潭”区分活态与僵化，贴切好记。"}
+  ]
+ }
+},
+{
+ id:"C2", cat:"文化传承", title:"公共文化空间如何“活起来”（2024 地市材料 4）",
+ prompt:"近年来，各地建成大批公共文化空间，但有的热闹一阵就冷清。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：畅雅艺术空间 3 个月 81 场活动；创始人“懂文化也善经营”；民办美术馆近 10 家勉强维持；24 小时书院几乎无人；书店同质化；市美术馆成“网红打卡点”；文化馆馆长谈布局散、离市区远、缺主题型。",
+ ref:{
+  titles:["让文化空间有人来","建起来，更要活起来","空间是容器，内容是磁石"],
+  thesis:"公共文化空间要从“建起来”走向“活起来”，关键在专业运营、差异定位、内容供给和机制保障四个方面。",
+  points:[
+   {head:"活起来，先要解决“谁来运营”。",why:"懂内容不等于懂经营。",ev:"畅雅艺术空间创始人既是文化名家又善经营；民办美术馆创始人多为领域行家，经营管理不在行，勉强维持。"},
+   {head:"活起来，还要解决“凭什么来”。",why:"同质化导致审美疲劳。",ev:"各区“缺啥建啥”、相互效仿；书店设计设施雷同、缺个性服务；应“一空间一主题”，挖本地文化基因。"},
+   {head:"活起来，更要解决“来了干什么”。",why:"只有好看的墙，人只能拍照。",ev:"被当“网红打卡点”，只看拍照；博物馆针对不同年龄开研学、非遗表演、礼乐讲座，用场所完成文化输出。"},
+   {head:"活起来，最终要靠机制托底。",why:"布局、评价、资源决定可持续。",ev:"老空间小散、新空间偏远→15 分钟文化圈、闲置空间嵌入式改造；以到馆率、参与度、满意度做绩效评价。"}
+  ],
+  ending:"文化空间是城市的客厅。客厅不怕小，怕没人愿来；不怕旧，怕没有温度。",
+  pitfalls:"只写“加大投入”；把“网红打卡”全怪群众；建议不可落地（如“加强管理”）。",
+  logic:[
+   {t:"反差",d:"开头两个反差场景设问，问题意识先立起来。"},
+   {t:"四维",d:"人（运营）、特（差异）、事（内容）、制（机制），四个维度互不重叠，覆盖面完整。"},
+   {t:"对策",d:"每段问题后紧跟对策，问题与建议一体，避免“前半篇骂、后半篇空”。"},
+   {t:"比喻",d:"“客厅”收尾，温暖且扣题。"}
+  ]
+ }
+},
+{
+ id:"D1", cat:"生态文明", title:"从一条河的复苏谈生态治理（2023 副省凤凰河材料）",
+ prompt:"凤凰河断流 25 年后实现全线通水，沿岸文化也随之复苏。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：林木砍伐、降水减少、逐层筑坝→多段干涸；2018 年成立协调领导小组、出台两个规划；2021 年首次全线通水；文化遗产类型齐全；叶教授“文化的生命在于用”。",
+ ref:{
+  titles:["一条河的复苏","让水回来，让文化活起来","治水，从来不只是治水"],
+  thesis:"河流治理要顺着病根治、全流域一盘棋、以水激活文化、让群众在护河中受益——治水本质上是治发展、治文化、治民生。",
+  points:[
+   {head:"复苏，先要找到病根。",why:"症状在下游，病灶常在上游。",ev:"上游砍伐水土流失、降水减少十分之一、逐层筑坝拦截；只清下游不治上游，河还是会干。"},
+   {head:"复苏，要靠全流域“一盘棋”。",why:"跨行政区，各扫门前雪治不好。",ev:"2018 年协调领导小组成立，年度工作要点、沟通协调、监督检查；两个专业规划；3 年努力实现 25 年来首次全线通水。"},
+   {head:"复苏，还要让水“激活”文化。",why:"流动的河能激活文化之河。",ev:"旧石器、新石器、红色文化、现代工业遗址；生态旅游+文化旅游；凤凰河博物馆、“凤河游”App。"},
+   {head:"复苏，最终要变成群众的获得感。",why:"没有获得感，治理难持续。",ev:"沿岸市镇村庄的农家乐、民宿、文创与就业；让群众在护河中受益、在受益中护河。"}
+  ],
+  ending:"一条河的生命在于水流动，一座城的生命在于人流动，一个文明的生命在于文脉流动。",
+  pitfalls:"只写“保护生态”；不谈跨区域协调；把文化与生态写成两张皮。",
+  logic:[
+   {t:"细节",d:"开头用“老人说戏曲又响起来了”，一句把生态与文化连起来。"},
+   {t:"规律",d:"“症状在下游、病灶在上游”这类提炼句，是把材料上升为规律的关键。"},
+   {t:"扩展",d:"四层从技术→机制→文化→民生，格局逐层打开。"},
+   {t:"排比",d:"结尾三重“流动”，气势与主题兼得。"}
+  ]
+ }
+},
+{
+ id:"D2", cat:"生态文明", title:"生态产品如何“有价”又“有市”（2023 地市/执法 GEP 材料）",
+ prompt:"A 市通过 GEP 核算，让生态产品可度量、可交易、可融资。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：GEP 核算方法与报告；碧澜乡水域救援培训；云瀑乡 300 万元生态产品交易；生态强村公司；500 万元“GEP贷”；“天工之城”要素分红；58.83 元/吨、1 万吨湿地碳汇。",
+ ref:{
+  titles:["算好生态这笔账","让绿水青山“有价”更“有市”","从资源到资产"],
+  thesis:"生态产品价值实现，要算清“值多少”、打通“怎么卖”、解决“钱从哪来”、形成“如何持续”的闭环，让保护者受益、破坏者付代价。",
+  points:[
+   {head:"第一笔账：值多少——让生态资源可度量。",why:"说不清价值，保护就是负担。",ev:"制定 GEP 核算方法，评估森林湿地农田；报告让碧澜乡看到溪流水质与急流，让云瀑乡看到峡谷瀑布云海的竞争力。"},
+   {head:"第二笔账：怎么卖——让生态产品可交易。",why:"没有经营主体，资源只是风景。",ev:"所有乡镇组建生态强村公司，成为供给与交易主体；水域救援培训、探险与梯田观光、“溪游记”；云瀑乡企业支付 300 万元。"},
+   {head:"第三笔账：钱从哪来——让生态产品可融资。",why:"投入大、回报慢、缺抵押物。",ev:"芳草镇以调节服务类、文化服务类生态产品使用经营权质押，获 500 万元“GEP贷”，激活金融属性。"},
+   {head:"第四笔账：如何持续——让价值反哺生态。",why:"一次性变现不可持续。",ev:"生态价值作为生产要素参与利润分配，“生态绿谷”转“数字绿谷”；吸引环境敏感型企业；碳汇收益反哺湿地绿化与修复。"}
+  ],
+  ending:"算得清、卖得出、贷得到、留得住，绿水青山才能把金山银山留给子孙。",
+  pitfalls:"把“生态”与“发展”对立；只写保护不写价值实现；算账写成数字罗列。",
+  logic:[
+   {t:"转折",d:"开头“不是修辞，而是账本”，一句把抽象概念落地。"},
+   {t:"闭环",d:"四笔账构成“资源→资产→资本→反哺”的完整链条，逻辑最严密。"},
+   {t:"问题",d:"每一笔账先提一个真问题（说不清、卖不掉、没钱、难持续），再给答案。"},
+   {t:"动词",d:"结尾四个动词收束，节奏干净。"}
+  ]
+ }
+},
+{
+ id:"E1", cat:"科技人才", title:"企业科技创新的“敢”字诀（2022 副省 B 公司材料）",
+ prompt:"B 公司研制出全球首款热效率突破 50% 的商业化柴油机。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：专家质疑“国外都没做到”；上千种方案；台架试验烧了发动机反而获奖；前置奖励；博士工作室经费上不封顶；每年 1000 万基础研究；10 年 300 亿、8%；“不关门、不违反”；299 万欧元胜 1500 万欧元。",
+ ref:{
+  titles:["敢为人先，方能领先","做别人没做过的事","领先，是一种长期主义"],
+  thesis:"企业要领先，必须敢定高目标、敢走市场路、敢容失败、敢投长期、敢开门合作——五个“敢”，构成创新的完整打法。",
+  points:[
+   {head:"敢定“够不着”的目标。",why:"目标高度决定能力上限。",ev:"挑战 50% 热效率遭质疑；正是这个目标逼出攻关团队与上千种方案。"},
+   {head:"敢走“市场要”的路。",why:"脱离市场的领先只是实验室领先。",ev:"不搞技术自嗨；算客户账：百公里省 10%、一年 20 万公里省三四万元。"},
+   {head:"敢“允许失败”。",why:"失败也是数据。",ev:"发动机烧了不批评反给前置奖励；前置激励避免结项奖励打折；分析失败甄选方向。"},
+   {head:"敢“长期投入”。",why:"领先是多年积累，不是一年爆发。",ev:"10 年 300 亿、研发费用率 8% 以上；研究院每年 2000 万无须审批；每年 1000 万基础研究。"},
+   {head:"敢“开放而不失底线”。",why:"技术和格局都要领先。",ev:"“不关门”用全球资源，“不违反”守知识产权；299 万欧元靠“员工不下岗、文化融合”胜出。"}
+  ],
+  ending:"敢想、敢试、敢容、敢投、敢开——五个“敢”，就是“做别人没做过的”的完整注脚。",
+  pitfalls:"只写“要创新”不写机制；把“宽容失败”写成“放任”；忽略市场导向。",
+  logic:[
+   {t:"引语",d:"开头一句“我们就是要做别人没做过的”定调，紧跟三个事实，短促有力。"},
+   {t:"排比",d:"五段同一句式“敢……”，节奏统一，阅卷人好抓点。"},
+   {t:"数据",d:"50%、10%、300 亿、8%、299 万/1500 万，数字选得准，不堆砌。"},
+   {t:"回收",d:"结尾把五个“敢”压缩成一句，扣题。"}
+  ]
+ }
+},
+{
+ id:"E2", cat:"科技人才", title:"如何让人才坐得住“冷板凳”（科技人才类通用）",
+ prompt:"有企业每年拿出千万元支持“没有直接经济效益”的基础研究，允许博士团队 5 年、10 年攻关一个项目甚至失败。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：博士工作室经费上不封顶、500 万；研究院 2000 万无须审批；两年 1 亿重奖；科研人员收入是管理人员 2 倍以上；住房补贴；与高校共建研究中心、全球协同研发平台；G 省种业“三轮连动”。",
+ ref:{
+  titles:["把“冷板凳”坐热","给人才一张安静的书桌","重视人才，先尊重规律"],
+  thesis:"让人才坐得住冷板凳，要给定力（时间）、给环境（容错）、给保障（待遇）、给通道（转化），四者缺一不可。",
+  points:[
+   {head:"给定力：不着急，才碰得到真问题。",why:"年年考核、季季要成果，只能做短平快。",ev:"博士工作室经费上不封顶、无人约束；刚成立即申报 500 万；基础研究每年 1000 万。"},
+   {head:"给环境：输得起，才敢探索。",why:"失败即问责，创新就停止。",ev:"激励前置，节点突破即奖；烧发动机不罚反奖，传递“认真探索有人兜底”。"},
+   {head:"给保障：安得心，才能专心。",why:"生活压力会挤占科研精力。",ev:"两年 1 亿重奖；科研人员收入是管理人员 2 倍以上；本科到博士住房补贴；加班餐、打车报销。"},
+   {head:"给通道：用得上，冷板凳才有人愿坐。",why:"成果不能永远停在论文里。",ev:"与高校共建研究中心、全球协同研发平台；G 省种业选育、制种、产业开发“三轮连动”，“以粮带种、以种促优”。"}
+  ],
+  ending:"给时间、给宽容、给保障、给通道，冷板凳才能坐热，冷板凳才能坐出热成果。",
+  pitfalls:"写成“提高待遇”一条；空喊“尊重人才”；忽略成果转化通道。",
+  logic:[
+   {t:"设问",d:"开头用“5 年 10 年然后失败，值不值”制造张力，再用“总开关”给出判断。"},
+   {t:"拆解",d:"把“重视人才”拆成时间、容错、待遇、转化四个可操作维度，避免空泛。"},
+   {t:"因果",d:"每段“为什么要—企业怎么做—所以应怎样”，因果链完整。"},
+   {t:"排比",d:"结尾四个“给”，短而有力。"}
+  ]
+ }
+},
+{
+ id:"F1", cat:"乡村振兴", title:"渔村如何在退养还湖后振兴（2022 副省临诗村材料）",
+ prompt:"临诗村退养还湖后，靠渔文化和生态资源发展乡村旅游，成为“中国美丽乡村”。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：“渔隐”主题、深休闲微度假慢文化细体验；专业设计师绘图；90% 外来渔民、南北文化融合；渔文化博物馆；26 种面食、36 道船菜；开渔节、杀围节、品蟹节；19 处设施、3 万停车位；渔家学堂；公众号与网店。",
+ ref:{
+  titles:["让乡村既有“颜值”又有“产值”","把“渔”字做成品牌","乡村的味道，才是最好的招牌"],
+  thesis:"乡村文旅要找准定位不跟风、做深文化不停留、护好生态不短视、补齐服务不留短板、打通销路不断链，才能既有颜值又有产值。",
+  points:[
+   {head:"找准定位，不跟风。",why:"雷同必然审美疲劳。",ev:"请专业设计师绘图，收集渔技渔歌渔俗，定“渔隐”主题；90% 外来渔民形成的南北融合文化，别处抄不走。"},
+   {head:"做深文化，不停留。",why:"文化要可吃可玩可带走。",ev:"渔文化博物馆（齿罩、枪船、登篓、大网、水瓢、马灯）；出湖捕蟹捕虾；26 种面食、36 道船菜；三大节庆。"},
+   {head:"护好生态，不短视。",why:"好生态是乡村文旅的本钱。",ev:"污水池、垃圾分类池、节能灯、环保志愿队；漫道、景观桥、红莲芡实观赏区 19 处。"},
+   {head:"补齐服务，不留短板。",why:"拼到最后拼体验。",ev:"闲置房改民宿、码头接船、攻略向导一条龙；3 万停车位、游客中心、导览图；渔家学堂按季培训。"},
+   {head:"打通销路，不断链。",why:"会做还要会说、会卖。",ev:"营销小团队+网络媒体；公众号、网店卖鱼虾蟹、芡实、菱角与文创。"}
+  ],
+  ending:"颜值是山水村落文化，产值是产业就业收入。二者结合，乡村才能既留得住人，也留得住心。",
+  pitfalls:"只写“建景点”；文化写成展板；忽略生态底线与服务细节。",
+  logic:[
+   {t:"问题",d:"开头“渔民上岸，路怎么走”，用真问题切入，不绕。"},
+   {t:"方法",d:"五条覆盖规划、内容、底线、体验、市场，是一套可复制的乡村文旅方法论。"},
+   {t:"数字",d:"26 种、36 道、19 处、3 万个，细节让文章可信。"},
+   {t:"对仗",d:"结尾把“颜值/产值”各拆三词，收束整齐。"}
+  ]
+ }
+},
+{
+ id:"F2", cat:"乡村振兴", title:"一个“融”字看城乡融合（2022 地市 Z 城材料）",
+ prompt:"Z 城不靠海、不沿边、无矿产，却成为全国农村一二三产业融合发展试点示范县。县委书记说，一个“融”字贯穿全过程。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：“农业发展我发展，我与农民共前行”；破除资金土地人才流动障碍；两大产业链、全产业链体系；老鲁 2.3 亿、2.1 万亩、3000 多户、6 个合作社、人均增收 3.5 万；引回园林专业博士硕士；现代农业园区与生态景区。",
+ ref:{
+  titles:["一“融”解百难","让要素流起来","城乡融合，不是乡村变城市"],
+  thesis:"城乡融合要先破制度之壁、再长产业之链、还要留住人、各美其美——融合不是简单嫁接，而是让要素流起来、产业长起来、人留下来、生活好起来。",
+  points:[
+   {head:"融，先要破壁。",why:"最大堵点不是距离，而是制度。",ev:"引导各部门树立“我与农民共前行”；破除资金、土地、人才流动障碍；出台支持意见，引导工商资本下乡。"},
+   {head:"融，要能生链。",why:"只撒钱不长产业，农民难受益。",ev:"种植、养殖两大产业链，全产业链体系，三产交叉培育新业态；老鲁榛子项目“企业+合作社+基地+农户+深加工+仓储物流”，带动 3000 多户。"},
+   {head:"融，要能留人。",why:"乡村吸引人靠机会，不靠口号。",ev:"老鲁功成身退回乡；项目引回多名园林专业博士硕士做榛苗繁育；有项目、有平台、有奔头。"},
+   {head:"融，还要各美其美。",why:"融合不是把乡村推平建楼。",ev:"新型农村社区周边现代农业园区、生态景区成为共生共融典范；城有便利，乡有味道。"}
+  ],
+  ending:"一个“融”字，拆开是破壁、生链、留人、各美其美；合起来，就是城乡共荣。",
+  pitfalls:"把“融合”写成“城市化”；只讲工商资本下乡，不讲农民受益；忽略人才。",
+  logic:[
+   {t:"反差",d:"开头四个“没有”对四个“国家级荣誉”，设问自然。"},
+   {t:"递进",d:"制度→产业→人→价值，层层深入，不停留在“修路建厂”。"},
+   {t:"案例",d:"老鲁案例一段用足：投资、面积、模式、户数、增收，避免案例堆砌。"},
+   {t:"拆合",d:"结尾把“融”拆成四件事再合起来，扣题不空。"}
+  ]
+ }
+},
+{
+ id:"G1", cat:"青年成长", title:"如何走出职业转型的“两难”（2024 副省小李材料）",
+ prompt:"汽车行业转型中，工程师小李既想离开萎缩的公司，又担心适应不了新势力的内卷，陷入“两难”。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：2018 年车市首降、2021 年新能源扩张；A 公司业务单一；小沈跳槽薪酬+30%、工作量+300%，3 个月离职；小王“内燃机与电机理念相通”“困住自己的往往是自己”。",
+ ref:{
+  titles:["困住自己的，往往是自己","与其被变化推着走","看清路，再迈步"],
+  thesis:"走出转型两难，要看清趋势、算清综合账、低成本试错、放下他人评价；主动不是莽撞，而是有准备地改变。",
+  points:[
+   {head:"困住自己的，常常是“看不见趋势”。",why:"趋势早就在数据和同行选择里。",ev:"2018 年多数人认为新能源只是政策产物；2021 年 A 公司“一损俱损”，寒意才来。"},
+   {head:"困住自己的，常常是“算不清账”。",why:"只盯一个变量就会打转。",ev:"只算现有稳定，没算业务萎缩与裁员风险；只算+30% 薪酬，没算+300% 工作量。"},
+   {head:"困住自己的，常常是“不敢试错”。",why:"转型可以是迁移，不是推倒重来。",ev:"内燃机与电机理念技术相通；商用车、氢内燃机仍有空间；内部转岗、参与项目、学一门课都是低成本试错。"},
+   {head:"困住自己的，还常常是“怕别人怎么看”。",why:"职业是自己的，日子也是自己的。",ev:"有人说离开是折腾、去新势力是投机；小王的笃定“搞自己感兴趣的专业更有价值”。"}
+  ],
+  ending:"环境会变，行业会变，能带走的只有能力与心态。困住自己的，往往不是外围，而是那句“再等等”。",
+  pitfalls:"写成“辞职鸡汤”；只讲心态不讲路径；把“主动”写成“冲动”。",
+  logic:[
+   {t:"人物",d:"开头三个人物三种心态，迅速把“两难”具象化。"},
+   {t:"心理",d:"四层都指向认知与心理，比“提升能力”更深入。"},
+   {t:"辩证",d:"补一段“主动不等于莽撞”，防止片面鼓励跳槽。"},
+   {t:"落点",d:"“再等等”三个字收尾，具体、扎心。"}
+  ]
+ }
+},
+{
+ id:"G2", cat:"青年成长", title:"平凡岗位的分量（2024 地市王师傅材料）",
+ prompt:"图书馆木工王师傅修桌椅、做木箱、打磨限位木块，“在修缮中创造，于毫末处耕耘”。请结合给定资料，联系实际，自选角度，自拟题目，写一篇文章。1000—1200 字。",
+ hint:"材料可用：抽屉坏了修抽屉、椅子坏了修椅子；古籍部定制木箱；窗户限位木块；室外步梯分隔木门；“让环境更舒适、让人感到被重视和被关怀”。",
+ ref:{
+  titles:["于毫末处耕耘","平凡岗位的重量","把平凡做到不平凡"],
+  thesis:"平凡岗位的分量，在于托住秩序底座、做出专业高度、赢得社会尊重、共担共同责任；平凡不是平庸。",
+  points:[
+   {head:"平凡岗位，托着秩序的底座。",why:"缺位则秩序立刻露缝。",ev:"图书馆开门不只靠藏书系统，也靠修桌椅、做木箱、装门；城市靠水电工、保洁员、公交司机、网格员。"},
+   {head:"平凡岗位，也能做出专业的高度。",why:"专业也可以是把小事做到“刚刚好”。",ev:"古籍部特殊尺寸木箱、步梯分隔木门、窗户限位块，都是“适用于具体场景”的定制，背后是对使用者的体察。"},
+   {head:"平凡岗位，需要被看见、被尊重。",why:"待遇与通道影响留人留手艺。",ev:"后勤保洁护理快递常被视为“无技术含量”；应给合理薪酬、培训、晋升通道与职业尊严。"},
+   {head:"平凡岗位，还连着共同的责任。",why:"每个人都在为秩序默默付出。",ev:"材料原句：“投入自己的领域，不断打磨、不断修补，为人们温暖笃定的生活秩序默默付出。”"}
+  ],
+  ending:"平凡不是平庸，岗位不分高低，分量在于你是否认真对待它。",
+  pitfalls:"写成“劳动最光荣”的空喊；只写王师傅不联系社会；把“平凡”写成“躺平”。",
+  logic:[
+   {t:"细节",d:"开头“一块卡住窗户的小木块”，极小细节与宏大主题形成反差，最打动人。"},
+   {t:"上升",d:"从图书馆→城市→所有普通岗位，以点带面，格局打开。"},
+   {t:"尊重",d:"第三层谈待遇与尊严，是很多答案想不到的现实维度。"},
+   {t:"判断",d:"结尾“平凡不是平庸”，一句话立住。"}
+  ]
+ }
+}
+];
+
+const CATS = ["全部","基层治理","经济产业","文化传承","生态文明","科技人才","乡村振兴","青年成长"];
+let cur = null;
+let curCat = "全部";
+
+const $ = id => document.getElementById(id);
+const storeKey = id => "essay_frame_" + id;
+
+function renderTabs(){
+  $("tabs").innerHTML = CATS.map(c =>
+    `<button class="tab ${c===curCat?'active':''}" data-cat="${c}">${c}</button>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach(b=>{
+    b.onclick = ()=>{ curCat = b.dataset.cat; renderTabs(); renderList(); };
+  });
+}
+function filtered(){ return curCat==="全部" ? DATA : DATA.filter(d=>d.cat===curCat); }
+function renderList(){
+  const list = filtered();
+  $("qlist").innerHTML = list.map(d=>
+    `<button class="qitem ${cur&&cur.id===d.id?'active':''}" data-id="${d.id}">
+      ${d.title}<small>${d.cat}</small></button>`).join("");
+  $("qlist").querySelectorAll(".qitem").forEach(b=>{
+    b.onclick = ()=>select(b.dataset.id);
+  });
+}
+function select(id){
+  cur = DATA.find(d=>d.id===id);
+  renderList();
+  $("catTag").textContent = cur.cat;
+  $("qTitle").textContent = cur.title;
+  $("qPrompt").textContent = cur.prompt;
+  const s = JSON.parse(localStorage.getItem(storeKey(id)) || "{}");
+  $("fTitle").value = s.title || "";
+  $("fThesis").value = s.thesis || "";
+  $("fP1h").value = s.p1h || ""; $("fP1e").value = s.p1e || "";
+  $("fP2h").value = s.p2h || ""; $("fP2e").value = s.p2e || "";
+  $("fP3h").value = s.p3h || ""; $("fP3e").value = s.p3e || "";
+  $("fEnd").value = s.end || "";
+  updateCounter();
+  loadCk();
+  $("refBox").classList.remove("show");
+  $("refBox").innerHTML = "";
+}
+function updateCounter(){ $("cThesis").textContent = ($("fThesis").value.trim().length) + " 字"; }
+
+function renderRef(){
+  if(!cur) return;
+  const r = cur.ref;
+  const pts = r.points.map((p,i)=>`
+    <div class="pt">
+      <b>分论点${i+1}：</b>${p.head}<br>
+      <p><em>作用：</em>${p.why}</p>
+      <p><em>可用论据：</em>${p.ev}</p>
+    </div>`).join("");
+  const logic = r.logic.map((l,i)=>`
+    <div class="step"><div class="num">${i+1}</div>
+      <div class="txt"><b>${l.t}：</b>${l.d}</div></div>`).join("");
+  $("refBox").innerHTML = `
+    <div class="ref-card">
+      <h4>参考框架</h4>
+      <p style="margin:4px 0 6px;color:#5b6675;font-size:13px">标题备选</p>
+      <ul>${r.titles.map(t=>`<li>${t}</li>`).join("")}</ul>
+      <p style="margin:10px 0 4px;color:#5b6675;font-size:13px">中心论点</p>
+      <div class="thesis">${r.thesis}</div>
+      ${pts}
+      <div class="pt"><b>结尾：</b>${r.ending}</div>
+      <div class="pit"><b>本题易丢分：</b>${r.pitfalls}</div>
+    </div>
+    <div class="ref-card logic">
+      <h4>逐段逻辑讲解</h4>
+      ${logic}
+      <div class="tip">看完讲解，回到你自己的框架逐条比对：分论点是否同层级？每段有没有“为什么”？材料例是否超过两处？</div>
+    </div>`;
+  $("refBox").classList.add("show");
+}
+function collect(){
+  if(!cur) return null;
+  return {
+    title:$("fTitle").value.trim(), thesis:$("fThesis").value.trim(),
+    p1h:$("fP1h").value.trim(), p1e:$("fP1e").value.trim(),
+    p2h:$("fP2h").value.trim(), p2e:$("fP2e").value.trim(),
+    p3h:$("fP3h").value.trim(), p3e:$("fP3e").value.trim(),
+    end:$("fEnd").value.trim()
+  };
+}
+function save(){
+  if(!cur) return;
+  localStorage.setItem(storeKey(cur.id), JSON.stringify(collect()));
+  $("saveBtn").textContent = "已保存 ✓";
+  setTimeout(()=>$("saveBtn").textContent="保存草稿",1200);
+}
+function toText(){
+  const c = collect();
+  return `【题目】${cur.title}\n\n【标题】${c.title}\n【中心论点】${c.thesis}\n\n【分论点一】${c.p1h}\n论据：${c.p1e}\n\n【分论点二】${c.p2h}\n论据：${c.p2e}\n\n【分论点三】${c.p3h}\n论据：${c.p3e}\n\n【结尾】${c.end}`;
+}
+
+$("refBtn").onclick = ()=>{ if(!cur){alert("请先选择题库中的一道题");return;} save(); renderRef();
+  $("refBox").scrollIntoView({behavior:"smooth",block:"start"}); };
+$("saveBtn").onclick = save;
+$("copyBtn").onclick = async ()=>{
+  if(!cur){alert("请先选择题目");return;}
+  const txt = toText();
+  try{ await navigator.clipboard.writeText(txt); $("copyBtn").textContent="已复制 ✓"; }
+  catch(e){ alert("复制失败，请手动选择文本"); }
+  setTimeout(()=>$("copyBtn").textContent="复制我的框架",1400);
+};
+$("clearBtn").onclick = ()=>{
+  if(!cur) return;
+  if(!confirm("清空本题草稿？")) return;
+  localStorage.removeItem(storeKey(cur.id));
+  select(cur.id);
+};
+$("randomBtn").onclick = ()=>{
+  const list = filtered();
+  const d = list[Math.floor(Math.random()*list.length)];
+  select(d.id);
+};
+$("fThesis").addEventListener("input", updateCounter);
+
+const cks = document.querySelectorAll("[data-ck]");
+function loadCk(){
+  const k = "essay_ck_" + (cur ? cur.id : "none");
+  const saved = JSON.parse(localStorage.getItem(k) || "[]");
+  cks.forEach((c,i)=>{ c.checked = !!saved[i]; });
+  refreshScore();
+}
+function refreshScore(){
+  const n = [...cks].filter(c=>c.checked).length;
+  $("score").textContent = `已完成 ${n} / ${cks.length}` + (n===cks.length ? " · 可以动笔了" : " · 还差 " + (cks.length-n) + " 项");
+  localStorage.setItem("essay_ck_"+ (cur?cur.id:"none"), JSON.stringify([...cks].map(c=>c.checked)));
+}
+cks.forEach(c=>c.addEventListener("change", refreshScore));
+
+renderTabs(); renderList();
+select(DATA[0].id);
+</script>
+</body>
+</html>
